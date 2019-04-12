@@ -45,5 +45,6 @@ dependencies {
 
     compileOnly "com.facebook.react:react-native:+"
     implementation "com.android.support:appcompat-v7:${supportLibVersion}"
+    implementation "com.google.code.findbugs:jsr305:3.0.2"
     implementation "com.google.android.libraries.places:places:1.0.0"
 }
