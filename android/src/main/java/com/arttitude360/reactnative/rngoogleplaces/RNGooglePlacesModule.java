@@ -359,8 +359,11 @@ public class RNGooglePlacesModule extends ReactContextBaseJavaModule implements 
         if (selectedFields.contains(Place.Field.ADDRESS_COMPONENTS)) {
             WritableMap addressComponentsMap = Arguments.createMap();
             for (AddressComponent addressComponent: place.getAddressComponents().asList()) {
-                addressComponentsMap.putString(addressComponent.getTypes().get(0), addressComponent.getName());
+                if (addressComponent.getTypes().size() > 0) {
+                    addressComponentsMap.putString(addressComponent.getTypes().get(0), addressComponent.getName());
+                }
             }
+            map.putMap("addressComponents", addressComponentsMap);
         }
 
         if (selectedFields.contains(Place.Field.LAT_LNG)) {
