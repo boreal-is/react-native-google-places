@@ -294,7 +294,7 @@ public class RNGooglePlacesModule extends ReactContextBaseJavaModule implements 
     }
 
     @ReactMethod
-    public void getCurrentPlace(ReadableArray fields, final Promise promise) {
+    public void getCurrentPlace(Activity activity, ReadableArray fields, final Promise promise) {
         if (ContextCompat.checkSelfPermission(this.reactContext.getApplicationContext(), permission.ACCESS_WIFI_STATE)
             != PackageManager.PERMISSION_GRANTED
         || ContextCompat.checkSelfPermission(this.reactContext.getApplicationContext(), permission.ACCESS_FINE_LOCATION)
@@ -571,5 +571,9 @@ public class RNGooglePlacesModule extends ReactContextBaseJavaModule implements 
 
     private String findPlaceTypeLabelByPlaceTypeId(Integer id) {
         return RNGooglePlacesPlaceTypeEnum.findByTypeId(id).getLabel();
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
     }
 }
