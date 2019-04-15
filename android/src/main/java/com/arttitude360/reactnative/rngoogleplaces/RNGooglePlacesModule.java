@@ -90,7 +90,7 @@ public class RNGooglePlacesModule extends ReactContextBaseJavaModule implements 
      * Called after the autocomplete activity has finished to return its result.
      */
     @Override
-    public void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
+    public void onActivityResult(Activity activity, final int requestCode, final int resultCode, final Intent intent) {
 
         // Check that the result was from the autocomplete widget.
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
@@ -294,7 +294,7 @@ public class RNGooglePlacesModule extends ReactContextBaseJavaModule implements 
     }
 
     @ReactMethod
-    public void getCurrentPlace(Activity activity, ReadableArray fields, final Promise promise) {
+    public void getCurrentPlace(ReadableArray fields, final Promise promise) {
         if (ContextCompat.checkSelfPermission(this.reactContext.getApplicationContext(), permission.ACCESS_WIFI_STATE)
             != PackageManager.PERMISSION_GRANTED
         || ContextCompat.checkSelfPermission(this.reactContext.getApplicationContext(), permission.ACCESS_FINE_LOCATION)
