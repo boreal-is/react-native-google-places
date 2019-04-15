@@ -33,12 +33,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
-import com.google.android.libraries.places.api.model.LocationBias;
-import com.google.android.libraries.places.api.model.LocationRestriction;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.RectangularBounds;
-import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.api.model.*;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -47,11 +42,9 @@ import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
-import com.google.android.libraries.places.api.model.PlaceLikelihood;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 
@@ -97,7 +90,7 @@ public class RNGooglePlacesModule extends ReactContextBaseJavaModule implements 
      * Called after the autocomplete activity has finished to return its result.
      */
     @Override
-    public void onActivityResult(Activity activity, final int requestCode, final int resultCode, final Intent intent) {
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
 
         // Check that the result was from the autocomplete widget.
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
@@ -363,6 +356,13 @@ public class RNGooglePlacesModule extends ReactContextBaseJavaModule implements 
 
         WritableMap map = Arguments.createMap();
 
+        if (selectedFields.contains(Place.Field.ADDRESS_COMPONENTS)) {
+            WritableMap addressComponentsMap = Arguments.createMap();
+            for (AddressComponent addressComponent: place.getAddressComponents().asList()) {
+                addressComponentsMap.putString(addressComponent.getTypes().get(0), addressComponent.getName());
+            }
+        }
+
         if (selectedFields.contains(Place.Field.LAT_LNG)) {
             WritableMap locationMap = Arguments.createMap();
             locationMap.putDouble("latitude", place.getLatLng().latitude);
@@ -571,9 +571,5 @@ public class RNGooglePlacesModule extends ReactContextBaseJavaModule implements 
 
     private String findPlaceTypeLabelByPlaceTypeId(Integer id) {
         return RNGooglePlacesPlaceTypeEnum.findByTypeId(id).getLabel();
-    }
-
-    @Override
-    public void onNewIntent(Intent intent) {
     }
 }
